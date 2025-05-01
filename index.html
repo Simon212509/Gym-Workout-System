@@ -1,59 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gym Workout System</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gym Workout System</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
 </head>
 <body>
+  <div class="container">
+    <!-- Header -->
+    <header>
+      <h1 class="title">Gym Workout System</h1>
+      <p class="subtitle">Create and manage your workouts, then plan your sessions!</p>
+      <div class="cta-buttons">
+        <button class="cta-btn" id="bookPT">Book Personal Trainer</button>
+        <button class="cta-btn" id="getNutrition">Get Nutrition Advice</button>
+      </div>
+    </header>
 
-    <div class="container">
-        <!-- Header Section -->
-        <header>
-            <h1 class="title">Gym Workout System</h1>
-            <p class="subtitle">Create and manage your workouts, then plan your sessions!</p>
-            <div class="cta-buttons">
-                <button class="cta-btn">Book Personal Trainer</button>
-                <button class="cta-btn">Get Nutrition Advice</button>
-            </div>
-        </header>
+    <!-- Main -->
+    <main>
+      <section class="workout-form">
+        <h2>Add New Workout</h2>
+        <form id="workoutForm">
+          <input type="text" id="workoutName" placeholder="Workout Name" required />
+          <textarea id="workoutDescription" placeholder="Workout Description" required></textarea>
+          <input type="file" id="workoutMedia" accept="image/*,video/*" />
+          <button type="submit" class="btn">Add Workout</button>
+        </form>
+      </section>
 
-        <!-- Main Content Area -->
-        <main>
-            <!-- Workout Form Section -->
-            <section class="workout-form">
-                <h2>Add New Workout</h2>
-                <form id="workoutForm">
-                    <input type="text" id="workoutName" placeholder="Workout Name" required>
-                    <textarea id="workoutDescription" placeholder="Workout Description" required></textarea>
-                    <input type="file" id="workoutMedia" accept="image/*,video/*">
-                    <button type="submit" class="btn">Add Workout</button>
-                </form>
-            </section>
+      <section class="workout-list">
+        <h2>Your Workouts</h2>
+        <ul id="workoutList"></ul>
+      </section>
 
-            <!-- Workout List Section -->
-            <section class="workout-list">
-                <h2>Your Workouts</h2>
-                <ul id="workoutList"></ul>
-            </section>
+      <section class="session-plan">
+        <h2>Create Your Workout Session</h2>
+        <ul id="sessionList"></ul>
+        <button id="saveSession" class="btn">Save Session Plan</button>
+      </section>
+    </main>
 
-            <!-- Session Plan Section -->
-            <section class="session-plan">
-                <h2>Create Your Workout Session</h2>
-                <ul id="sessionList"></ul>
-                <button id="saveSession" class="btn">Save Session Plan</button>
-            </section>
-        </main>
+    <!-- Footer -->
+    <footer>
+      <p>&copy; 2025 Gym Workout System</p>
+    </footer>
+  </div>
 
-        <!-- Footer Section -->
-        <footer>
-            <p>&copy; 2025 Gym Workout System</p>
-        </footer>
+  <!-- PT Booking Modal -->
+  <div id="ptModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal('ptModal')">&times;</span>
+      <h3>Book a Personal Trainer</h3>
+      <form id="ptForm">
+        <input type="text" placeholder="Your Name" required />
+        <input type="email" placeholder="Your Email" required />
+        <input type="date" required />
+        <button type="submit" class="btn">Submit Booking</button>
+      </form>
     </div>
+  </div>
 
-    <script src="script.js"></script>
+  <!-- Nutrition Advice Modal -->
+  <div id="nutritionModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal('nutritionModal')">&times;</span>
+      <h3>Nutrition Advice</h3>
+      <ul>
+        <li>✅ Eat balanced meals (protein, carbs, healthy fats)</li>
+        <li>💧 Stay hydrated - 2-3L water/day</li>
+        <li>🥦 Add more greens and whole foods</li>
+        <li>🚫 Limit sugar and processed food</li>
+        <li>🍽️ Track your calorie intake if you're training with goals</li>
+      </ul>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
 
