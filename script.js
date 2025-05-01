@@ -6,94 +6,103 @@ document.addEventListener('DOMContentLoaded', () => {
     const workoutList = document.getElementById('workoutList');
     const sessionList = document.getElementById('sessionList');
     const saveSessionButton = document.getElementById('saveSession');
-
-    // Load saved workouts from local storage
+  
     let workouts = JSON.parse(localStorage.getItem('workouts')) || [];
-
-    // Display workouts in the list
-    const displayWorkouts = () => {
-        workoutList.innerHTML = '';
-        workouts.forEach((workout, index) => {
-            const listItem = document.createElement('li');
-            listItem.innerHTML = `
-                <div>
-                    <h3>${workout.name}</h3>
-                    <p>${workout.description}</p>
-                    ${workout.media ? `<img src="${workout.media}" alt="${workout.name}" />` : ''}
-                </div>
-                <button class="edit-btn" data-index="${index}">Edit</button>
-                <button class="delete-btn" data-index="${index}">Delete</button>
-            `;
-            workoutList.appendChild(listItem);
-        });
-    };
-
-    // Add new workout
+  
+    function displayWorkouts() {
+      workoutList.innerHTML = '';
+      workouts.forEach((workout, index) => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+          <div>
+            <h3>${workout.name}</h3>
+            <p>${workout.description}</p>
+            ${workout.media ? `<img src="${workout.media}" alt="${workout.name}"/>` : ''}
+          </div>
+          <div>
+            <button onclick="editWorkout(${index})">Edit</button>
+            <button onclick="deleteWorkout(${index})">Delete</button>
+            <button onclick="addToSession(${index})">Add to Session</button>
+          </div>
+        `;
+        workoutList.appendChild(li);
+      });
+    }
+  
     workoutForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        
-        const newWorkout = {
-            name: workoutName.value,
-            description: workoutDescription.value,
-            media: workoutMedia.files.length ? URL.createObjectURL(workoutMedia.files[0]) : null
-        };
-
-        workouts.push(newWorkout);
-        localStorage.setItem('workouts', JSON.stringify(workouts));
-        workoutName.value = '';
-        workoutDescription.value = '';
-        workoutMedia.value = '';
-        displayWorkouts();
+      e.preventDefault();
+      const mediaURL = workoutMedia.files.length ? URL.createObjectURL(workoutMedia.files[0]) : null;
+  
+      workouts.push({
+        name: workoutName.value,
+        description: workoutDescription.value,
+        media: mediaURL
+      });
+  
+      localStorage.setItem('workouts', JSON.stringify(workouts));
+      workoutForm.reset();
+      displayWorkouts();
     });
-
-    // Edit workout
-    workoutList.addEventListener('click', (e) => {
-        const index = e.target.dataset.index;
-        if (e.target.classList.contains('edit-btn')) {
-            const workout = workouts[index];
-            workoutName.value = workout.name;
-            workoutDescription.value = workout.description;
-            workoutMedia.value = ''; // Reset file input for simplicity
-            workouts.splice(index, 1); // Remove it temporarily to avoid duplicates
-            localStorage.setItem('workouts', JSON.stringify(workouts));
-            displayWorkouts();
-        }
-    });
-
-    // Delete workout
-    workoutList.addEventListener('click', (e) => {
-        const index = e.target.dataset.index;
-        if (e.target.classList.contains('delete-btn')) {
-            workouts.splice(index, 1);
-            localStorage.setItem('workouts', JSON.stringify(workouts));
-            displayWorkouts();
-        }
-    });
-
-    // Add workout to session plan
-    workoutList.addEventListener('click', (e) => {
-        const index = e.target.dataset.index;
-        if (e.target.classList.contains('edit-btn')) {
-            const workout = workouts[index];
-            const sessionItem = document.createElement('li');
-            sessionItem.innerHTML = `
-                <h4>${workout.name}</h4>
-                <p>${workout.description}</p>
-                ${workout.media ? `<img src="${workout.media}" alt="${workout.name}" />` : ''}
-            `;
-            sessionList.appendChild(sessionItem);
-        }
-    });
-
-    // Save session plan
+  
+    window.editWorkout = (index) => {
+      const workout = workouts[index];
+      workoutName.value = workout.name;
+      workoutDescription.value = workout.description;
+      workouts.splice(index, 1);
+      localStorage.setItem('workouts', JSON.stringify(workouts));
+      displayWorkouts();
+    };
+  
+    window.deleteWorkout = (index) => {
+      workouts.splice(index, 1);
+      localStorage.setItem('workouts', JSON.stringify(workouts));
+      displayWorkouts();
+    };
+  
+    window.addToSession = (index) => {
+      const workout = workouts[index];
+      const li = document.createElement('li');
+      li.innerHTML = `
+        <h4>${workout.name}</h4>
+        <p>${workout.description}</p>
+        ${workout.media ? `<img src="${workout.media}" alt="${workout.name}"/>` : ''}
+      `;
+      sessionList.appendChild(li);
+    };
+  
     saveSessionButton.addEventListener('click', () => {
-        alert('Session plan saved!');
-        sessionList.innerHTML = ''; // Clear session plan after saving
+      alert("Workout session saved!");
+      sessionList.innerHTML = '';
     });
-
-    // Initial display of workouts
+  
+    // Modal controls
+    document.getElementById('bookPT').addEventListener('click', () => {
+      document.getElementById('ptModal').style.display = 'block';
+    });
+  
+    document.getElementById('getNutrition').addEventListener('click', () => {
+      document.getElementById('nutritionModal').style.display = 'block';
+    });
+  
+    window.closeModal = (id) => {
+      document.getElementById(id).style.display = 'none';
+    };
+  
+    window.onclick = (event) => {
+      if (event.target.classList.contains('modal')) {
+        event.target.style.display = "none";
+      }
+    };
+  
+    document.getElementById('ptForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert("Thanks! Your personal trainer request has been submitted.");
+      closeModal('ptModal');
+    });
+  
     displayWorkouts();
-});
+  });
+  
 
 
 
